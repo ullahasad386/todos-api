@@ -3,26 +3,41 @@ class ItemsController < ApplicationController
   before_action :set_todo_item, only: [:show, :update, :destroy]
 
   def index
-    json_response(@todo.items)
+    render json: { meta: {status: 'SUCCESS', code: 200, message: 'Listing all items'}, data: @todo.items},
+    status: :ok
   end
 
   def show
-    json_response(@item)
+    render json: { meta: {status: 'SUCCESS', code: 200, message: 'Selected Item'}, data: @item},
+    status: :ok
   end
 
   def create
-    @todo.items.create!(item_params)
-    json_response(@todo, :created)
+    @itemm = @todo.items.create!(item_params)
+    #json_response(@todo, :created)
+    if @itemm.save
+      render json: { meta: {status: 'SUCCESS', code: 201, message: 'Saved Item'}, data: @todo}, status: :ok
+    else
+      render json: { meta: {status: 'ERROR', code: 422, message: 'Item not saved'}, data: @todo.items.errors},
+      status: :unprocessable_entity
+    end
+
   end
 
   def update
-    @item.update(item_params)
-    head :no_content
+    if @item.update(item_params)
+      render json: { meta: {status: 'SUCCESS', code: 204, message: 'Updated Item'}, data: @item}, status: :ok
+    else
+      render json: { meta: {status: 'ERROR', code: 422, message: 'Item not updated'}, data: @item.errors},
+      status: :unprocessable_entity
+    end
+    #head :no_content
   end
 
   def destroy
     @item.destroy
-    head :no_content
+    render json: { meta: {status: 'SUCCESS', code: 204, message: 'Deleted Item'}, data: @item}, status: :ok
+    #head :no_content
   end
 
   private
