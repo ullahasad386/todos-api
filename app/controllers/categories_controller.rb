@@ -11,7 +11,7 @@ class CategoriesController < ApplicationController
     @category = Category.create!(category_params)
 
     if @category.save
-      render json: { meta: {status: 'SUCCESS', code: 201, message: 'Saved Category'}, data: @category}, status: :ok
+      render json: { meta: {status: 'SUCCESS', code: 200, message: 'Saved Category'}, data: @category}, status: :ok
     else
       render json: { meta: {status: 'ERROR', code: 422, message: 'Category not saved'}, data: @category.errors},
       status: :unprocessable_entity
@@ -24,7 +24,7 @@ class CategoriesController < ApplicationController
 
   def update
     if @category.update(category_params)
-      render json: { meta: {status: 'SUCCESS', code: 204, message: 'Updated Category'}, data: @category}, status: :ok
+      render json: { meta: {status: 'SUCCESS', code: 200, message: 'Updated Category'}, data: @category}, status: :ok
     else
       render json: { meta: {status: 'ERROR', code: 422, message: 'Category not updated'}, data: @category.errors},
       status: :unprocessable_entity

@@ -16,7 +16,7 @@ class ItemsController < ApplicationController
     @itemm = @todo.items.create!(item_params)
     #json_response(@todo, :created)
     if @itemm.save
-      render json: { meta: {status: 'SUCCESS', code: 201, message: 'Saved Item'}, data: @todo}, status: :ok
+      render json: { meta: {status: 'SUCCESS', code: 200, message: 'Saved Item'}, data: @todo}, status: 200
     else
       render json: { meta: {status: 'ERROR', code: 422, message: 'Item not saved'}, data: @todo.items.errors},
       status: :unprocessable_entity
@@ -26,7 +26,7 @@ class ItemsController < ApplicationController
 
   def update
     if @item.update(item_params)
-      render json: { meta: {status: 'SUCCESS', code: 204, message: 'Updated Item'}, data: @item}, status: :ok
+      render json: { meta: {status: 'SUCCESS', code: 200, message: 'Updated Item'}, data: @item}, status: 200
     else
       render json: { meta: {status: 'ERROR', code: 422, message: 'Item not updated'}, data: @item.errors},
       status: :unprocessable_entity
@@ -36,7 +36,7 @@ class ItemsController < ApplicationController
 
   def destroy
     @item.destroy
-    render json: { meta: {status: 'SUCCESS', code: 204, message: 'Deleted Item'}, data: @item}, status: :ok
+    render json: { meta: {status: 'SUCCESS', code: 200, message: 'Deleted Item'}, data: @item}, status: 200
     #head :no_content
   end
 
