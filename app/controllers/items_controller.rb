@@ -16,7 +16,7 @@ class ItemsController < ApplicationController
     @itemm = @todo.items.create!(item_params)
     #json_response(@todo, :created)
     if @itemm.save
-      render json: { meta: {status: 'SUCCESS', code: 200, message: 'Saved Item'}, data: @todo}, status: 200
+      render json: { meta: {status: 'SUCCESS', code: 200, message: 'Saved Item'}, data: @itemm}, status: 200
     else
       render json: { meta: {status: 'ERROR', code: 422, message: 'Item not saved'}, data: @todo.items.errors},
       status: :unprocessable_entity

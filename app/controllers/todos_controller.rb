@@ -1,18 +1,19 @@
 class TodosController < ApplicationController
-  before_action :set_todo, only: [:show, :update, :destroy]
+  #before_action :set_todo, only: [:show, :update, :destroy]
+  before_action :set_category
+  before_action :set_category_todo, only: [:show, :update, :destroy]
 
   def index
-    @todos = current_user.todos
-    render json: { meta: {status: 'SUCCESS', code: 200, message: 'Listing all todos'}, data: @todos},
+    render json: { meta: {status: 'SUCCESS', code: 200, message: 'Listing all todos'}, data: @category.todos},
     status: :ok
   end
 
   def create
-    @todo = current_user.todos.create!(todo_params)
-    if @todo.save
-      render json: { meta: {status: 'SUCCESS', code: 200, message: 'Saved Todo'}, data: @todo}, status: 200
+    @todoo = @category.todos.create!(todo_params)
+    if @todoo.save
+      render json: { meta: {status: 'SUCCESS', code: 200, message: 'Saved Todo'}, data: @todoo}, status: 200
     else
-      render json: { meta: {status: 'ERROR', code: 422, message: 'Todo not saved'}, data: @todo.errors},
+      render json: { meta: {status: 'ERROR', code: 422, message: 'Todo not saved'}, data: @category.todos.errors},
       status: :unprocessable_entity
     end
   end
@@ -38,11 +39,19 @@ class TodosController < ApplicationController
   private
 
   def todo_params
-    params.permit(:title)
+    params.permit(:title, :created_by)
   end
 
-  def set_todo
-    @todo = Todo.find(params[:id])
+  def set_category
+    @category = Category.find(params[:category_id])
   end
+
+  def set_category_todo
+    @todo = @category.todos.find_by!(id: params[:id]) if @category
+  end
+
+  #d#ef set_todo
+    #@todo = current_user.todos.find(params[:id])
+  #end
 
   end

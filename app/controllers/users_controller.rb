@@ -4,7 +4,7 @@ skip_before_action :authorize_request, only: :create
     user = User.create!(user_params)
     auth_token = AuthenticateUser.new(user.email, user.password).call
     #render json: { meta: {status: 'SUCCESS', code: 200, message: 'Updated todo'}, data: @todo}, status: 200
-    response = { meta: {status: 'SUCCESS', code: 200}, message: Message.account_created, auth_token: auth_token }
+    response = { meta: {status: 'SUCCESS', code: 200}, data: { message: Message.account_created, auth_token: auth_token }}
     #response = { message: Message.account_created, auth_token: auth_token }
     json_response(response, :created)
   end

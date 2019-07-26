@@ -2,14 +2,13 @@ class CategoriesController < ApplicationController
   before_action :set_category, only: [:show, :update, :destroy]
 
   def index
-    @categories = Category.all
+    @categories = current_user.categories
     render json: { meta: {status: 'SUCCESS', code: 200, message: 'Listing all categories'}, data: @categories},
     status: :ok
   end
 
   def create
-    @category = Category.create!(category_params)
-
+    @category = current_user.categories.create!(category_params)
     if @category.save
       render json: { meta: {status: 'SUCCESS', code: 200, message: 'Saved Category'}, data: @category}, status: :ok
     else
@@ -19,7 +18,8 @@ class CategoriesController < ApplicationController
   end
 
   def show
-    render json: { meta: {status: 'SUCCESS', code: 200, message: 'Loaded category'}, data: @category}, status: :ok
+    render json: { meta: {status: 'SUCCESS', code: 200, message: 'Loaded category and its todos'}, data: { category: @category,
+    todos:  @category.todos }}, status: :ok
   end
 
   def update
@@ -43,6 +43,6 @@ class CategoriesController < ApplicationController
   end
 
   def set_category
-    @category = Category.find(params[:id])
+    @category = current_user.categories.find(params[:id])
   end
 end
