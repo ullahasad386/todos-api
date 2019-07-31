@@ -31,8 +31,8 @@ class TodosController < ApplicationController
     if @todo.update(todo_params)
         render json: { meta: {status: 'SUCCESS', code: 200, message: 'Updated todo'}, data: @todo}, status: 200
       else
-        render json: { meta: {status: 'ERROR', code: 422, message: 'Todo not updated'}, data: @todo.errors},
-        status: :unprocessable_entity
+        render json: { meta: {status: 'ERROR', code: 404, message: 'Todo not found'}, data: @todo.errors},
+        status: :not_found
       end
   end
 

@@ -36,7 +36,7 @@ ActiveRecord::Schema.define(version: 2019_07_25_112930) do
 
   create_table "todos", force: :cascade do |t|
     t.string "title"
-    t.string "created_by" 
+    t.string "created_by"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "category_id"

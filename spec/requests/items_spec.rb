@@ -3,15 +3,17 @@ require 'rails_helper'
 RSpec.describe 'Items API' do
   # Initialize the test data
   let(:user) { create(:user) }
-  let!(:todo) { create(:todo, created_by: user.id ) }
+  let!(:category) { create(:category)}
+  let!(:todo) { create(:todo, category_id: category_id ) }
   let!(:items) { create_list(:item, 20, todo_id: todo.id) }
+  let(:category_id) { category.id }
   let(:todo_id) { todo.id }
   let(:id) { items.first.id }
   let(:headers) { valid_headers }
 
   # Test suite for GET /todos/:todo_id/items
-  describe 'GET /todos/:todo_id/items' do
-    before { get "/todos/#{todo_id}/items", params: {}, headers: headers }
+  describe 'GET /categories/:category_id/todos/:todo_id/items' do
+    before { get "/categories/#{category_id}/todos/#{todo_id}/items", params: {}, headers: headers }
 
     context 'when todo exists' do
       it 'returns status code 200' do
@@ -19,7 +21,8 @@ RSpec.describe 'Items API' do
       end
 
       it 'returns all todo items' do
-        expect(json.size).to eq(20)
+
+        expect(json['data'].size).to eq(20)
       end
     end
 
@@ -37,8 +40,8 @@ RSpec.describe 'Items API' do
   end
 
   # Test suite for GET /todos/:todo_id/items/:id
-  describe 'GET /todos/:todo_id/items/:id' do
-    before { get "/todos/#{todo_id}/items/#{id}", params: {}, headers: headers }
+  describe 'GET /categories/:category_id/todos/:todo_id/items/:id' do
+    before { get "/categories/#{category_id}/todos/#{todo_id}/items/#{id}", params: {}, headers: headers }
 
     context 'when todo item exists' do
       it 'returns status code 200' do
@@ -46,7 +49,7 @@ RSpec.describe 'Items API' do
       end
 
       it 'returns the item' do
-        expect(json['id']).to eq(id)
+        expect(json['data']['id']).to eq(id)
       end
     end
 
@@ -64,20 +67,20 @@ RSpec.describe 'Items API' do
   end
 
   # Test suite for PUT /todos/:todo_id/items
-  describe 'POST /todos/:todo_id/items' do
+  describe 'POST /categories/:category_id/todos/:todo_id/items' do
     let(:valid_attributes) { { name: 'Visit Narnia', done: false }.to_json }
 
     context 'when request attributes are valid' do
       before do
-          post "/todos/#{todo_id}/items", params: valid_attributes, headers: headers
+          post "/categories/#{category_id}/todos/#{todo_id}/items", params: valid_attributes, headers: headers
        end
-      it 'returns status code 201' do
-        expect(response).to have_http_status(201)
+      it 'returns status code 200' do
+        expect(response).to have_http_status(200)
       end
     end
 
     context 'when an invalid request' do
-      before { post "/todos/#{todo_id}/items", params: {}, headers: headers }
+      before { post "/categories/#{category_id}/todos/#{todo_id}/items", params: {}, headers: headers }
 
       it 'returns status code 422' do
         expect(response).to have_http_status(422)
@@ -90,16 +93,16 @@ RSpec.describe 'Items API' do
   end
 
   # Test suite for PUT /todos/:todo_id/items/:id
-  describe 'PUT /todos/:todo_id/items/:id' do
+  describe 'PUT /categories/:category_id/todos/:todo_id/items/:id' do
     let(:valid_attributes) { { name: 'Mozart' }.to_json }
 
         before do
-          put "/todos/#{todo_id}/items/#{id}", params: valid_attributes, headers: headers
+          put "/categories/#{category_id}/todos/#{todo_id}/items/#{id}", params: valid_attributes, headers: headers
         end
 
     context 'when item exists' do
-      it 'returns status code 204' do
-        expect(response).to have_http_status(204)
+      it 'returns status code 200' do
+        expect(response).to have_http_status(200)
       end
 
       it 'updates the item' do
@@ -123,10 +126,10 @@ RSpec.describe 'Items API' do
 
   # Test suite for DELETE /todos/:id
   describe 'DELETE /todos/:id' do
-    before { delete "/todos/#{todo_id}/items/#{id}", params: {}, headers: headers }
+    before { delete "/categories/#{category_id}/todos/#{todo_id}/items/#{id}", params: {}, headers: headers }
 
-    it 'returns status code 204' do
-      expect(response).to have_http_status(204)
+    it 'returns status code 200' do
+      expect(response).to have_http_status(200)
     end
   end
 end
