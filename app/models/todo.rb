@@ -5,8 +5,8 @@ class Todo < ApplicationRecord
   validates_presence_of :title
   #validates_presence_of :created_by
 
-  #before_validation(on: :create) do
-    #self.created_by = 'You'
-  #end
+  before_validation(on: :create) do
+    self.created_by = 'You'
+  end
 
 end

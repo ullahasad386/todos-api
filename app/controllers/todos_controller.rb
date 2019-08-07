@@ -2,6 +2,7 @@ class TodosController < ApplicationController
   #before_action :set_todo, only: [:show, :update, :destroy]
   before_action :set_category
   before_action :set_category_todo, only: [:show, :update, :destroy]
+  
 
   def index
     render json: { meta: {status: 'SUCCESS', code: 200, message: 'Listing all todos'}, data: @category.todos},
